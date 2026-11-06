@@ -32,7 +32,7 @@
   header .sp { flex: 1; }
   button, .btn {
     background: var(--panel2); color: var(--text); border: 1px solid var(--line);
-    border-radius: 6px; padding: 5px 11px; font: inherit; cursor: pointer;
+    border-radius: 6px; padding: 5px 10px; font: inherit; cursor: pointer;
   }
   button:hover, .btn:hover { border-color: #56607a; }
   button.on { background: #3a4a2f; border-color: var(--accent); }
@@ -41,40 +41,30 @@
   main { flex: 1; display: flex; min-height: 0; }
   #left { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   #toolbar {
-    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
     padding: 7px 10px; border-bottom: 1px solid var(--line); background: var(--panel);
   }
-  #toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 6px; }
+  #toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 5px; }
   #toolbar .lbl { color: var(--muted); }
+  #zoomLbl { color: var(--muted); font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; min-width: 52px; text-align: right; }
+  #hover:empty::before { content: "Haritanın üzerine gelin: koordinat, pusula, derinlik ve blok adı burada görünür."; opacity: .7; }
   #hover {
-    margin-left: auto; font-family: ui-monospace, Consolas, monospace; font-size: 12.5px;
-    color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+    padding: 4px 10px; font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; min-height: 26px;
+    color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    background: var(--panel); border-bottom: 1px solid var(--line);
   }
-  #viewport {
-    flex: 1; overflow: auto; position: relative; background: #0d0e11; cursor: grab;
-    min-height: 200px;
-  }
-  #viewport.drag { cursor: grabbing; }
-  #stripWrap { position: sticky; top: 0; z-index: 2; height: 14px; background: #0d0e11; }
-  #strip { display: block; height: 14px; image-rendering: pixelated; }
-  #mapWrap { position: relative; }
-  #map { display: block; }
-  #map.px { image-rendering: pixelated; image-rendering: crisp-edges; }
-  #hl {
-    position: absolute; display: none; pointer-events: none;
-    border: 2px solid #fff; box-shadow: 0 0 0 2px #000, 0 0 18px #fff8;
-    animation: blink 1s ease-in-out 4;
-  }
-  @keyframes blink { 50% { border-color: #ffe14a; } }
-  #empty {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;
-  }
-  .drop {
-    border: 2px dashed #4a5163; border-radius: 12px; padding: 36px 28px; text-align: center;
-    max-width: 520px; color: var(--muted);
-  }
+  #ovWrap { position: relative; background: #0d0e11; border-bottom: 1px solid var(--line); }
+  #ov { display: block; width: 100%; height: 20px; cursor: pointer; touch-action: none; }
+  #ovWrap .ew { position: absolute; top: 2px; font-size: 10.5px; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; pointer-events: none; }
+  #viewport { flex: 1; position: relative; overflow: hidden; background: #0d0e11; min-height: 220px; touch-action: none; }
+  #view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+  #view.drag { cursor: grabbing; }
+  #help { position: absolute; right: 8px; bottom: 6px; font-size: 11.5px; color: #fff; opacity: .75;
+          text-shadow: 0 0 3px #000, 0 0 3px #000; pointer-events: none; }
+  #empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px; background: #0d0e11; }
+  .drop { border: 2px dashed #4a5163; border-radius: 12px; padding: 36px 28px; text-align: center; max-width: 520px; color: var(--muted); }
   .drop b { color: var(--text); font-size: 17px; display: block; margin-bottom: 6px; }
-  body.dragover .drop, body.dragover #viewport { outline: 3px solid var(--accent); outline-offset: -3px; }
+  body.dragover #viewport { outline: 3px solid var(--accent); outline-offset: -3px; }
   #progress {
     position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 5;
     width: min(420px, calc(100% - 32px)); background: var(--panel); border: 1px solid var(--line);
@@ -82,10 +72,7 @@
   }
   #progress .bar { height: 10px; background: #0d0e11; border-radius: 5px; overflow: hidden; margin-top: 8px; }
   #progress .fill { height: 100%; width: 0; background: var(--accent); transition: width .1s; }
-  #side {
-    width: 400px; flex: none; overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line);
-    padding: 14px;
-  }
+  #side { width: 400px; flex: none; overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line); padding: 14px; }
   .box { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; margin-bottom: 12px; }
   .box h3 { margin: 0 0 7px; font-size: 14px; }
   .verdict { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; font-size: 16px; font-weight: 650; color: #fff; }
@@ -95,12 +82,10 @@
   .verdict.bad { background: var(--bad); }
   .verdict.none { background: #3b4150; }
   .kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; }
-  .kv span:nth-child(odd) { color: var(--muted); }
-  .kv span:nth-child(even) { word-break: break-word; }
-  .reg {
-    border: 1px solid var(--line); border-left-width: 5px; border-radius: 6px; padding: 7px 9px; margin-top: 7px;
-    cursor: pointer; background: #1b1e25;
-  }
+  .kv > span:nth-child(odd) { color: var(--muted); }
+  .kv > span:nth-child(even) { word-break: break-word; }
+  .link { color: #8fd0ff; cursor: pointer; text-decoration: underline dotted; }
+  .reg { border: 1px solid var(--line); border-left-width: 5px; border-radius: 6px; padding: 7px 9px; margin-top: 7px; cursor: pointer; background: #1b1e25; }
   .reg:hover { background: #222631; }
   .reg .t { font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
   .reg .d { color: var(--muted); font-size: 12.5px; }
@@ -112,8 +97,8 @@
   code { background: #11131a; padding: 1px 5px; border-radius: 4px; font-size: 12px; word-break: break-all; }
   @media (max-width: 900px) {
     main { flex-direction: column; }
-    #side { width: auto; border-left: 0; border-top: 1px solid var(--line); max-height: none; }
-    #left { min-height: 70vh; }
+    #side { width: auto; border-left: 0; border-top: 1px solid var(--line); }
+    #left { min-height: 75vh; }
   }
 </style>
 </head>
@@ -128,24 +113,30 @@
 <main>
   <div id="left">
     <div id="toolbar">
-      <span class="lbl">Yakınlaştır:</span>
-      <button data-zoom="fit" disabled>Sığdır</button>
+      <button data-zoom="fill" disabled title="Haritayı yüksekliğe sığdır (gökyüzünden cehenneme)">Sığdır</button>
+      <button data-zoom="all" disabled title="Tüm dünyayı göster">Tümü</button>
+      <button data-zoom="out" disabled title="Uzaklaştır">−</button>
+      <button data-zoom="in" disabled title="Yakınlaştır">+</button>
       <button data-zoom="1" disabled>1x</button>
       <button data-zoom="2" disabled>2x</button>
       <button data-zoom="4" disabled>4x</button>
+      <span id="zoomLbl"></span>
+      <span class="sep"></span>
+      <button id="spawnBtn" disabled title="Spawn noktasına git">⌂ Spawn</button>
       <span class="sep"></span>
       <span class="lbl">Görünüm:</span>
       <button data-mode="normal" class="on" disabled>Normal</button>
       <button data-mode="biome" disabled>Biyomlar</button>
-      <span id="hover"></span>
     </div>
+    <div id="hover"></div>
+    <div id="ovWrap"><canvas id="ov" height="20"></canvas><span class="ew" style="left:6px">◀ Batı</span><span class="ew" style="right:6px">Doğu ▶</span></div>
     <div id="viewport">
-      <div id="stripWrap" hidden><canvas id="strip" width="1" height="1"></canvas></div>
-      <div id="mapWrap" hidden><canvas id="map" width="1" height="1"></canvas><div id="hl"></div></div>
+      <canvas id="view"></canvas>
+      <div id="help">Tekerlek: yakınlaştır · Sürükle: kaydır · Çift tık: 2x yakınlaştır</div>
       <div id="empty">
         <div class="drop">
           <b>.wld dosyasını buraya sürükleyip bırakın</b>
-          ya da üstteki <b style="display:inline;font-size:inherit">“.wld dosyası seç…”</b> butonunu kullanın.<br><br>
+          ya da üstteki “.wld dosyası seç…” butonunu kullanın.<br><br>
           Dosya bilgisayarınızdan dışarı gönderilmez; her şey tarayıcıda okunur.
         </div>
       </div>
@@ -165,6 +156,7 @@
         <span><i style="background:#5a7fff"></i>Mantar</span>
         <span><i style="background:#d6e6ee"></i>Kar</span>
         <span><i style="background:#c8a85a"></i>Çöl</span>
+        <span><i style="background:#ffe14a"></i>Spawn</span>
       </div>
     </div>
     <div class="box">
@@ -204,25 +196,34 @@ cls[60] = C_JGRASS; cls[59] = C_MUD; cls[70] = C_MUSH;
 [147, 161].forEach(t => cls[t] = C_SNOW);
 [53, 396, 397].forEach(t => cls[t] = C_DESERT);
 
+// Yüzey tahmini için "zemin" sayılan bloklar (ağaç, yaprak, bitki vb. hariç)
+const TERRAIN = new Uint8Array(65536);
+[0, 1, 2, 23, 25, 40, 53, 57, 59, 60, 70, 109, 112, 116, 117, 123, 147, 161, 163, 164, 199, 200, 203, 224, 234,
+ 367, 368, 396, 397, 398, 399, 400, 401, 402, 403, 661, 662].forEach(t => TERRAIN[t] = 1);
+
 const NAMES = {
   0: "Toprak (Dirt)", 1: "Taş (Stone)", 2: "Çim (Grass)", 3: "Bitki", 4: "Meşale", 5: "Ağaç",
   6: "Demir cevheri", 7: "Bakır cevheri", 8: "Altın cevheri", 9: "Gümüş cevheri", 10: "Kapı", 11: "Açık kapı",
-  12: "Yaşam Kristali", 14: "Masa", 15: "Sandalye", 18: "Çalışma tezgâhı", 19: "Platform", 21: "Sandık",
+  12: "Yaşam Kristali", 14: "Masa", 15: "Sandalye", 18: "Çalışma tezgâhı", 19: "Platform", 20: "Fidan", 21: "Sandık",
   22: "Demonite cevheri", 23: "Corruption çimi", 24: "Corruption bitkisi", 25: "Ebonstone", 26: "Demon/Crimson Altar",
   27: "Ayçiçeği", 28: "Çömlek", 30: "Tahta", 31: "Shadow Orb / Crimson Heart", 32: "Corruption dikeni",
   37: "Meteorite", 38: "Gri tuğla", 40: "Kil (Clay)", 41: "Zindan tuğlası (mavi)", 43: "Zindan tuğlası (yeşil)",
   44: "Zindan tuğlası (pembe)", 48: "Diken (Spike)", 51: "Örümcek ağı", 52: "Sarmaşık", 53: "Kum (Sand)",
   56: "Obsidyen", 57: "Kül (Ash)", 58: "Hellstone", 59: "Çamur (Mud)", 60: "Jungle çimi", 61: "Jungle bitkisi",
   62: "Jungle sarmaşığı", 63: "Safir", 64: "Yakut", 65: "Zümrüt", 66: "Topaz", 67: "Ametist", 68: "Elmas",
-  69: "Jungle dikeni", 70: "Mantar çimi", 71: "Mantar", 72: "Dev mantar", 80: "Kaktüs",
+  69: "Jungle dikeni", 70: "Mantar çimi", 71: "Mantar", 72: "Dev mantar", 80: "Kaktüs", 81: "Mercan",
+  82: "Şifalı bitki (filiz)", 83: "Şifalı bitki", 84: "Şifalı bitki (açmış)",
   107: "Kobalt cevheri", 108: "Mithril cevheri", 109: "Hallow çimi", 111: "Adamantit cevheri", 112: "Ebonsand",
   116: "Pearlsand", 117: "Pearlstone", 123: "Silt", 147: "Kar (Snow)", 161: "Buz (Ice)", 163: "Mor buz (Corruption)",
-  164: "Pembe buz (Hallow)", 166: "Kalay cevheri", 167: "Kurşun cevheri", 168: "Tungsten cevheri",
-  169: "Platin cevheri", 189: "Bulut", 191: "Living Wood", 192: "Yapraklar", 199: "Crimson çimi",
+  164: "Pembe buz (Hallow)", 165: "Sarkıt", 166: "Kalay cevheri", 167: "Kurşun cevheri", 168: "Tungsten cevheri",
+  169: "Platin cevheri", 179: "Yeşil yosun", 180: "Kahverengi yosun", 181: "Kırmızı yosun", 182: "Mavi yosun",
+  183: "Mor yosun", 185: "Küçük dekor", 186: "Büyük dekor", 187: "Büyük dekor",
+  189: "Bulut", 191: "Living Wood", 192: "Yapraklar", 199: "Crimson çimi",
   200: "Kırmızı buz (Crimson)", 203: "Crimstone", 204: "Crimtane cevheri", 211: "Chlorophyte cevheri",
   221: "Palladyum cevheri", 222: "Orichalcum cevheri", 223: "Titanyum cevheri", 224: "Slush", 225: "Arı kovanı (Hive)",
-  226: "Lihzahrd tuğlası", 229: "Bal bloğu", 234: "Crimsand", 237: "Lihzahrd sunağı", 352: "Crimson dikeni",
-  367: "Mermer", 368: "Granit", 396: "Sandstone", 397: "Sertleşmiş kum", 398: "Corrupt sertleşmiş kum",
+  226: "Lihzahrd tuğlası", 229: "Bal bloğu", 234: "Crimsand", 237: "Lihzahrd sunağı", 323: "Palmiye", 352: "Crimson dikeni",
+  367: "Mermer", 368: "Granit", 383: "Living Mahogany", 384: "Mahogany yaprakları",
+  396: "Sandstone", 397: "Sertleşmiş kum", 398: "Corrupt sertleşmiş kum",
   399: "Crimson sertleşmiş kum", 400: "Corrupt sandstone", 401: "Crimson sandstone", 402: "Hallow sertleşmiş kum",
   403: "Hallow sandstone", 404: "Çöl fosili", 661: "Corrupt jungle çimi", 662: "Crimson jungle çimi"
 };
@@ -231,13 +232,12 @@ const NAMES = {
 /* Renk paletleri (Uint32, little-endian ABGR)                         */
 /* ------------------------------------------------------------------ */
 const rgb = (r, g, b) => (0xFF000000 | (b << 16) | (g << 8) | r) >>> 0;
-const hexOf = c => "#" + [c & 255, (c >> 8) & 255, (c >> 16) & 255].map(v => v.toString(16).padStart(2, "0")).join("");
 
 const PAL_N = new Uint32Array(65536).fill(rgb(120, 120, 128));
 const NORMAL_COLORS = {
   0: [151, 107, 75], 1: [128, 128, 128], 2: [28, 216, 94], 3: [27, 197, 109], 4: [253, 221, 3], 5: [120, 85, 60],
   6: [140, 101, 80], 7: [150, 67, 22], 8: [185, 164, 23], 9: [185, 194, 195], 10: [119, 105, 79], 11: [119, 105, 79],
-  12: [255, 60, 80], 14: [191, 142, 111], 15: [191, 142, 111], 18: [191, 142, 111], 19: [191, 142, 111],
+  12: [255, 60, 80], 14: [191, 142, 111], 15: [191, 142, 111], 18: [191, 142, 111], 19: [191, 142, 111], 20: [60, 160, 60],
   21: [233, 207, 94], 22: [98, 95, 167], 23: [141, 137, 223], 24: [122, 116, 218], 25: [109, 90, 128],
   26: [119, 101, 125], 27: [226, 196, 49], 28: [151, 79, 80], 30: [170, 120, 84], 31: [157, 67, 180],
   32: [130, 110, 170], 37: [104, 86, 84], 38: [144, 148, 144], 40: [146, 81, 68], 41: [66, 84, 109],
@@ -245,15 +245,19 @@ const NORMAL_COLORS = {
   53: [186, 168, 84], 56: [50, 40, 70], 57: [68, 68, 76], 58: [142, 66, 66], 59: [92, 68, 73],
   60: [143, 215, 29], 61: [63, 170, 40], 62: [63, 170, 40], 63: [42, 130, 250], 64: [220, 50, 50],
   65: [34, 221, 151], 66: [255, 200, 50], 67: [179, 80, 255], 68: [220, 240, 255], 69: [90, 150, 50],
-  70: [93, 127, 255], 71: [182, 175, 130], 72: [182, 175, 130], 80: [73, 120, 17],
+  70: [93, 127, 255], 71: [182, 175, 130], 72: [182, 175, 130], 80: [73, 120, 17], 81: [253, 120, 120],
+  82: [100, 200, 90], 83: [100, 200, 90], 84: [140, 220, 90],
   107: [11, 80, 143], 108: [91, 169, 169], 109: [78, 193, 227], 110: [78, 193, 227], 111: [128, 26, 52],
   112: [103, 98, 122], 116: [238, 225, 218], 117: [181, 172, 190], 123: [106, 107, 118], 147: [211, 236, 241],
-  161: [144, 195, 232], 163: [184, 154, 239], 164: [218, 183, 233], 166: [129, 125, 93], 167: [62, 82, 114],
-  168: [132, 157, 127], 169: [152, 171, 198], 189: [223, 255, 255], 191: [120, 85, 60], 192: [26, 196, 84],
+  161: [144, 195, 232], 163: [184, 154, 239], 164: [218, 183, 233], 165: [110, 110, 120], 166: [129, 125, 93], 167: [62, 82, 114],
+  168: [132, 157, 127], 169: [152, 171, 198], 179: [49, 134, 114], 180: [126, 134, 49], 181: [134, 59, 49],
+  182: [43, 86, 140], 183: [121, 49, 134], 185: [110, 105, 100], 186: [110, 105, 100], 187: [110, 105, 100],
+  189: [223, 255, 255], 191: [120, 85, 60], 192: [26, 196, 84],
   199: [208, 80, 80], 200: [216, 152, 144], 201: [203, 61, 64], 203: [128, 44, 45], 204: [125, 55, 65],
   211: [54, 164, 66], 221: [239, 90, 50], 222: [231, 96, 228], 223: [57, 85, 101], 224: [151, 161, 176],
   225: [227, 125, 22], 226: [141, 56, 0], 229: [255, 156, 12], 234: [83, 46, 57], 237: [253, 221, 3],
-  352: [170, 60, 70], 367: [168, 178, 204], 368: [50, 46, 104], 396: [212, 179, 100], 397: [176, 152, 90],
+  323: [182, 141, 86], 352: [170, 60, 70], 367: [168, 178, 204], 368: [50, 46, 104], 383: [110, 60, 50], 384: [50, 150, 40],
+  396: [212, 179, 100], 397: [176, 152, 90],
   398: [100, 80, 140], 399: [140, 70, 70], 400: [120, 95, 155], 401: [160, 75, 75], 402: [200, 180, 210],
   403: [210, 190, 230], 404: [140, 120, 90], 661: [120, 110, 200], 662: [200, 70, 70]
 };
@@ -272,7 +276,7 @@ HAL_IDS.forEach(t => PAL_B[t] = BC.hal);
 PAL_B[60] = BC.jgrass; PAL_B[59] = BC.mud; PAL_B[70] = BC.mush;
 
 const COL = {
-  normal: { sky: rgb(132, 170, 248), cave: rgb(44, 33, 27), hell: rgb(52, 18, 14), wall: rgb(78, 62, 52),
+  normal: { sky: rgb(132, 170, 248), cave: rgb(40, 30, 25), hell: rgb(52, 18, 14), wall: rgb(86, 68, 56),
             liq: [0, rgb(40, 90, 220), rgb(253, 100, 20), rgb(255, 205, 40), rgb(200, 150, 255)] },
   biome:  { sky: rgb(30, 34, 44), cave: rgb(20, 20, 24), hell: rgb(26, 18, 18), wall: rgb(38, 38, 42),
             liq: [0, rgb(30, 55, 120), rgb(160, 70, 20), rgb(150, 120, 30), rgb(120, 95, 160)] }
@@ -281,8 +285,10 @@ const COL = {
 /* ------------------------------------------------------------------ */
 /* Durum                                                               */
 /* ------------------------------------------------------------------ */
-const S = { W: 0, H: 0, tile: null, wall: null, liq: null, counts: null, ySum: null, yMin: null, yMax: null,
-            bgSplit: null, info: null, an: null, zoom: 1, mode: "normal", busy: false };
+const S = { W: 0, H: 0, tile: null, wall: null, liq: null, bgSplit: null, info: null, an: null,
+            mode: "normal", busy: false, ready: false, cam: { x: 0, y: 0, z: 1 }, viewMode: "fill" };
+const worldCanvas = document.createElement("canvas");
+const stripCanvas = document.createElement("canvas");
 
 const tick = () => new Promise(r => setTimeout(r, 0));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -361,6 +367,7 @@ async function parseWorld(buf) {
   i32(); i32(); i32(); i32(); // left, right, top, bottom
   const H = i32(), W = i32();
   if (W <= 0 || H <= 0 || W > 20000 || H > 10000) throw new FormatError("Dünya boyutu okunamadı (" + W + "x" + H + "). Dosya formatı desteklenmiyor olabilir.");
+  const spawn = findSpawn(dv, p, Math.min(sections[1], len), W, H);
 
   // Bloklar
   const N = W * H;
@@ -368,9 +375,10 @@ async function parseWorld(buf) {
   const wall = new Uint16Array(N);
   const liq = new Uint8Array(N);
   const counts = new Int32Array(NCLS * W);
-  const ySum = new Float64Array(4 * W);
-  const yMin = new Int32Array(4 * W).fill(H);
-  const yMax = new Int32Array(4 * W).fill(-1);
+  const ySum = new Float64Array(NCLS * W);
+  const ySq = new Float64Array(NCLS * W);
+  const yMin = new Int32Array(NCLS * W).fill(H);
+  const yMax = new Int32Array(NCLS * W).fill(-1);
 
   p = sections[1];
   for (let x = 0; x < W; x++) {
@@ -406,13 +414,12 @@ async function parseWorld(buf) {
       if (t !== 0xFFFF) {
         const c = cls[t];
         if (c) {
-          counts[c * W + x] += n;
-          if (c <= C_HAL) {
-            const j = c * W + x;
-            ySum[j] += n * y + n * (n - 1) / 2;
-            if (y < yMin[j]) yMin[j] = y;
-            if (y + n - 1 > yMax[j]) yMax[j] = y + n - 1;
-          }
+          const j = c * W + x;
+          counts[j] += n;
+          ySum[j] += n * y + n * (n - 1) / 2;
+          ySq[j] += n * y * y + y * n * (n - 1) + (n - 1) * n * (2 * n - 1) / 6;
+          if (y < yMin[j]) yMin[j] = y;
+          if (y + n - 1 > yMax[j]) yMax[j] = y + n - 1;
         }
       }
       y += n;
@@ -422,15 +429,32 @@ async function parseWorld(buf) {
   if (p > len) throw new FormatError("Dosya beklenenden kısa, bloklar okunurken dosyanın sonuna gelindi.");
   const formatOk = p === sections[2];
 
-  return { version, revision, name, seed, worldId, W, H, tile, wall, liq, counts, ySum, yMin, yMax,
-           formatOk, endPos: p, expectedEnd: sections[2] };
+  return { version, revision, name, seed, worldId, W, H, tile, wall, liq, counts, ySum, ySq, yMin, yMax,
+           spawn, formatOk, endPos: p, expectedEnd: sections[2] };
+}
+
+/* Spawn noktası: header'ı alan alan okumak yerine (1.4.5'te alanlar değişmiş olabilir)
+   şu örüntüyü arar: int32 spawnX, int32 spawnY, double worldSurface, double rockLayer.
+   Oyun bu dört değeri her sürümde art arda yazar. Hepsi dünya sınırları içinde olmalı. */
+function findSpawn(dv, from, to, W, H) {
+  for (let q = from; q + 24 <= to; q++) {
+    const sx = dv.getInt32(q, true);
+    if (sx < 10 || sx >= W - 10) continue;
+    const sy = dv.getInt32(q + 4, true);
+    if (sy < 10 || sy >= H - 10) continue;
+    const ws = dv.getFloat64(q + 8, true), rl = dv.getFloat64(q + 16, true);
+    if (!(ws > H * 0.05 && ws < H * 0.7 && rl > ws && rl < H * 0.9 && rl - ws < H * 0.5)) continue;
+    if (Math.abs(sy - ws) > H * 0.35) continue;
+    return { x: sx, y: sy, worldSurface: ws, rockLayer: rl };
+  }
+  return null;
 }
 
 /* ------------------------------------------------------------------ */
 /* Analiz                                                              */
 /* ------------------------------------------------------------------ */
 function toRegions(flag, W, gap, minW) {
-  let regs = [];
+  const regs = [];
   for (let x = 0; x < W; x++) {
     if (!flag[x]) continue;
     let e = x; while (e + 1 < W && flag[e + 1]) e++;
@@ -445,24 +469,43 @@ function toRegions(flag, W, gap, minW) {
 }
 
 function analyze(w) {
-  const { W, H, counts, ySum, yMin, yMax } = w;
+  const { W, H, counts, ySum, ySq, yMin, yMax } = w;
   const row = c => counts.subarray(c * W, (c + 1) * W);
   const corr = row(C_CORR), crim = row(C_CRIM), hal = row(C_HAL), jg = row(C_JGRASS), mud = row(C_MUD), mush = row(C_MUSH);
   const thrB = Math.max(10, Math.round(H * 0.008));
-  const thrJG = Math.max(8, Math.round(H * 0.006));
-  const thrMud = Math.max(40, Math.round(H * 0.05));
 
-  const evilF = new Uint8Array(W), halF = new Uint8Array(W), jungF = new Uint8Array(W);
+  const evilF = new Uint8Array(W), halF = new Uint8Array(W);
   let totCorr = 0, totCrim = 0, totHal = 0;
   for (let x = 0; x < W; x++) {
     totCorr += corr[x]; totCrim += crim[x]; totHal += hal[x];
     evilF[x] = corr[x] + crim[x] >= thrB;
     halF[x] = hal[x] >= thrB;
-    // Mantar biyomu da çamur kullanır: çok mantar çimi olan sütunlarda çamuru sayma.
-    jungF[x] = jg[x] >= thrJG || (mud[x] >= thrMud && mush[x] * 8 < mud[x]);
   }
 
-  const jungle = toRegions(jungF, W, 60, 50);
+  // Jungle: çamur + jungle çimi puanı, ±25 sütunluk ortalama ile yumuşatılır.
+  // Mantar biyomu da çamur kullandığı için mantar çimi puanı düşürür.
+  // Normal yeraltındaki küçük çamur/jungle çimi yamaları bu ortalamada eşiğe ulaşamaz.
+  const pre = new Float64Array(W + 1);
+  for (let x = 0; x < W; x++) pre[x + 1] = pre[x] + mud[x] + 3 * jg[x] - 4 * mush[x];
+  const R = 25, thrJ = H * 0.06;
+  const jungF = new Uint8Array(W);
+  for (let x = 0; x < W; x++) {
+    const a = Math.max(0, x - R), b = Math.min(W - 1, x + R);
+    jungF[x] = (pre[b + 1] - pre[a]) / (b - a + 1) >= thrJ;
+  }
+  let jungle = toRegions(jungF, W, 100, 50);
+  // Yumuşatma kenarları ~R sütun taşırır: kenarları yumuşatılmamış puanı eşiği geçen ilk/son sütuna kırp.
+  const rawJ = x => pre[x + 1] - pre[x] >= thrJ;
+  for (const r of jungle) {
+    while (r.s < r.e && !rawJ(r.s)) r.s++;
+    while (r.e > r.s && !rawJ(r.e)) r.e--;
+  }
+  // Dünyada tek bir Jungle vardır: en büyüğünü ve ona boyut olarak yakın parçaları tut.
+  if (jungle.length > 1) {
+    const big = Math.max(...jungle.map(r => r.e - r.s + 1));
+    jungle = jungle.filter(r => r.e - r.s + 1 >= big * 0.3);
+  }
+
   const evil = toRegions(evilF, W, 30, 15);
   const hallow = toRegions(halF, W, 30, 15);
 
@@ -476,14 +519,17 @@ function analyze(w) {
     return best;
   };
   const yInfo = (r, classes) => {
-    let sum = 0, n = 0, top = H, bot = -1;
+    // Kutunun dikey aralığı: ortalama ± 2 standart sapma (dağınık tek tük bloklar kutuyu şişirmesin)
+    let sum = 0, sq = 0, n = 0, top = H, bot = -1;
     for (let x = r.s; x <= r.e; x++) for (const c of classes) {
       const j = c * W + x;
-      sum += ySum[j]; n += counts[j];
+      sum += ySum[j]; sq += ySq[j]; n += counts[j];
       if (yMin[j] < top) top = yMin[j];
       if (yMax[j] > bot) bot = yMax[j];
     }
-    return { yMean: n ? Math.round(sum / n) : Math.round(H / 3), top: bot < 0 ? 0 : top, bot: bot < 0 ? H - 1 : bot, blocks: n };
+    if (!n) return { yMean: Math.round(H / 3), top: 0, bot: H - 1, blocks: 0 };
+    const mean = sum / n, sd = Math.sqrt(Math.max(0, sq / n - mean * mean));
+    return { yMean: Math.round(mean), top: Math.max(top, Math.floor(mean - 2 * sd)), bot: Math.min(bot, Math.ceil(mean + 2 * sd)), blocks: n };
   };
 
   for (const r of evil) {
@@ -494,10 +540,7 @@ function analyze(w) {
     r.dist = distToJungle(r);
   }
   for (const r of hallow) { Object.assign(r, yInfo(r, [C_HAL])); r.dist = distToJungle(r); r.kind = "hal"; }
-  for (const r of jungle) {
-    r.kind = "jungle";
-    r.yMean = Math.round(H * 0.35); r.top = 0; r.bot = H - 1;
-  }
+  for (const r of jungle) { r.kind = "jungle"; Object.assign(r, yInfo(r, [C_JGRASS, C_MUD])); }
 
   let leakEvil = 0, leakHal = 0;
   for (const j of jungle) for (let x = j.s; x <= j.e; x++) { leakEvil += corr[x] + crim[x]; leakHal += hal[x]; }
@@ -511,12 +554,14 @@ function analyze(w) {
   // Üst şerit için sütun biyomu
   const stripCol = new Uint32Array(W);
   const snow = row(C_SNOW), desert = row(C_DESERT);
+  const inJ = new Uint8Array(W);
+  for (const j of jungle) for (let x = j.s; x <= j.e; x++) inJ[x] = 1;
   for (let x = 0; x < W; x++) {
     const e = corr[x] + crim[x];
     let c = rgb(70, 110, 60);
     if (e >= thrB && e >= hal[x]) c = corr[x] >= crim[x] ? BC.corr : BC.crim;
     else if (hal[x] >= thrB) c = BC.hal;
-    else if (jungF[x]) c = BC.mud;
+    else if (inJ[x]) c = BC.mud;
     else if (mush[x] >= thrB * 3) c = BC.mush;
     else if (snow[x] >= thrB * 5) c = BC.snow;
     else if (desert[x] >= thrB * 5) c = BC.desert;
@@ -528,23 +573,24 @@ function analyze(w) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Çizim                                                               */
+/* Dünya resmini oluşturma                                             */
 /* ------------------------------------------------------------------ */
 function computeBackgroundSplit() {
-  const { W, H, tile, wall } = S;
+  const { W, H, tile } = S;
+  const split = new Int32Array(W);
+  const sp = S.info.spawn;
+  if (sp) { split.fill(Math.round(sp.worldSurface)); S.bgSplit = split; return; }
+  // Spawn/yüzey bilgisi bulunamadıysa: sütundaki ilk "zemin" bloğu (ağaç, yaprak, ada hariç).
   const first = new Int32Array(W);
   for (let x = 0; x < W; x++) {
-    let y = 0; while (y < H && tile[y * W + x] === 0xFFFF) y++;
+    let y = 0; while (y < H && !(tile[y * W + x] !== 0xFFFF && TERRAIN[tile[y * W + x]])) y++;
     first[x] = y;
   }
-  const sorted = Array.from(first).sort((a, b) => a - b);
-  const median = sorted[sorted.length >> 1];
+  const median = Array.from(first).sort((a, b) => a - b)[W >> 1];
   const from = Math.max(0, median - Math.round(H * 0.06));
-  const split = new Int32Array(W);
   for (let x = 0; x < W; x++) {
-    let y = from; while (y < H && !wall[y * W + x]) y++;
-    split[x] = Math.max(y, Math.min(first[x], H));
-    if (y >= H) split[x] = Math.max(first[x], median);
+    let y = from; while (y < H && !(tile[y * W + x] !== 0xFFFF && TERRAIN[tile[y * W + x]])) y++;
+    split[x] = y;
   }
   S.bgSplit = split;
 }
@@ -553,8 +599,8 @@ let renderToken = 0;
 async function render() {
   const token = ++renderToken;
   const { W, H, tile, wall, liq, bgSplit } = S;
-  const canvas = $("map");
-  const ctx = canvas.getContext("2d");
+  if (worldCanvas.width !== W || worldCanvas.height !== H) { worldCanvas.width = W; worldCanvas.height = H; }
+  const ctx = worldCanvas.getContext("2d");
   const img = ctx.createImageData(W, H);
   const px = new Uint32Array(img.data.buffer);
   const pal = S.mode === "biome" ? PAL_B : PAL_N;
@@ -578,126 +624,246 @@ async function render() {
   }
   ctx.putImageData(img, 0, 0);
   hideProgress();
+  S.ready = true;
+  requestDraw();
 }
 
-function drawStrip() {
-  const { W } = S;
-  const c = $("strip"); c.width = W; c.height = 1;
-  const ctx = c.getContext("2d");
-  const img = ctx.createImageData(W, 1);
+function buildStrip() {
+  stripCanvas.width = S.W; stripCanvas.height = 1;
+  const ctx = stripCanvas.getContext("2d");
+  const img = ctx.createImageData(S.W, 1);
   new Uint32Array(img.data.buffer).set(S.an.stripCol);
   ctx.putImageData(img, 0, 0);
 }
 
 /* ------------------------------------------------------------------ */
-/* Yakınlaştırma / kaydırma                                            */
+/* Kamera: yakınlaştırma / kaydırma                                    */
 /* ------------------------------------------------------------------ */
-const vp = $("viewport");
-const STRIP_H = 14;
-function fitZoom() {
-  return Math.min((vp.clientWidth - 2) / S.W, (vp.clientHeight - STRIP_H - 2) / S.H);
+const vp = $("viewport"), view = $("view"), vctx = view.getContext("2d");
+const ov = $("ov"), octx = ov.getContext("2d");
+const MAXZ = 16;
+const vpW = () => vp.clientWidth, vpH = () => vp.clientHeight;
+const zoomAll = () => Math.min(vpW() / S.W, vpH() / S.H);
+const zoomFill = () => vpH() / S.H;
+const minZoom = () => Math.min(zoomAll(), 1);
+
+function clampCam() {
+  const c = S.cam;
+  c.z = Math.min(MAXZ, Math.max(minZoom(), c.z));
+  const vw = vpW() / c.z, vh = vpH() / c.z;
+  c.x = S.W <= vw ? (S.W - vw) / 2 : Math.min(Math.max(c.x, 0), S.W - vw);
+  c.y = S.H <= vh ? (S.H - vh) / 2 : Math.min(Math.max(c.y, 0), S.H - vh);
 }
-function setZoom(z, cx, cy) {
-  if (!S.W) return;
-  if (cx === undefined) {
-    cx = (vp.scrollLeft + vp.clientWidth / 2) / S.zoom;
-    cy = (vp.scrollTop + (vp.clientHeight - STRIP_H) / 2) / S.zoom;
+function zoomAt(z, sx, sy) {
+  const c = S.cam;
+  const wx = c.x + sx / c.z, wy = c.y + sy / c.z;
+  c.z = Math.min(MAXZ, Math.max(minZoom(), z));
+  c.x = wx - sx / c.z; c.y = wy - sy / c.z;
+  S.viewMode = null; clampCam(); requestDraw();
+}
+function centerOn(wx, wy, z) {
+  const c = S.cam;
+  if (z !== undefined) c.z = Math.min(MAXZ, Math.max(minZoom(), z));
+  c.x = wx - vpW() / 2 / c.z; c.y = wy - vpH() / 2 / c.z;
+  clampCam(); requestDraw();
+}
+function applyViewMode() {
+  if (S.viewMode === "all") centerOn(S.W / 2, S.H / 2, zoomAll());
+  else if (S.viewMode === "fill") {
+    const c = S.cam, cx = c.x + vpW() / 2 / c.z;
+    centerOn(cx, S.H / 2, zoomFill());
   }
-  S.zoom = z;
-  const cw = S.W * z, ch = S.H * z;
-  const map = $("map");
-  map.style.width = cw + "px"; map.style.height = ch + "px";
-  map.classList.toggle("px", z >= 1);
-  $("mapWrap").style.width = cw + "px"; $("mapWrap").style.height = ch + "px";
-  $("stripWrap").style.width = cw + "px"; $("strip").style.width = cw + "px";
-  vp.scrollLeft = cx * z - vp.clientWidth / 2;
-  vp.scrollTop = cy * z - (vp.clientHeight - STRIP_H) / 2;
-  updateHighlight();
-  document.querySelectorAll("[data-zoom]").forEach(b => {
-    const v = b.dataset.zoom;
-    b.classList.toggle("on", v === "fit" ? S.zoomMode === "fit" : S.zoomMode === v);
-  });
 }
+
+let drawPending = false;
+function requestDraw() { if (!drawPending) { drawPending = true; requestAnimationFrame(draw); } }
+function draw() {
+  drawPending = false;
+  const dpr = window.devicePixelRatio || 1;
+  const cw = Math.round(vpW() * dpr), ch = Math.round(vpH() * dpr);
+  if (view.width !== cw || view.height !== ch) { view.width = cw; view.height = ch; }
+  vctx.setTransform(1, 0, 0, 1, 0, 0);
+  vctx.fillStyle = "#0d0e11"; vctx.fillRect(0, 0, cw, ch);
+  drawOverview();
+  if (!S.ready) return;
+  const c = S.cam, k = dpr * c.z;
+  vctx.imageSmoothingEnabled = c.z < 1;
+  vctx.imageSmoothingQuality = "high";
+  vctx.setTransform(k, 0, 0, k, -c.x * k, -c.y * k);
+  vctx.drawImage(worldCanvas, 0, 0);
+  vctx.setTransform(1, 0, 0, 1, 0, 0);
+  const sx = wx => (wx - c.x) * k, sy = wy => (wy - c.y) * k;
+
+  if (hlRegion) {
+    const r = hlRegion, pad = 4 * dpr;
+    const x0 = sx(r.s) - pad, y0 = sy(r.top) - pad, x1 = sx(r.e + 1) + pad, y1 = sy(r.bot + 1) + pad;
+    vctx.lineWidth = 4 * dpr; vctx.strokeStyle = "#000"; vctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+    vctx.lineWidth = 2 * dpr; vctx.strokeStyle = "#ffe14a"; vctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+  }
+  const sp = S.info && S.info.spawn;
+  if (sp) {
+    const x = sx(sp.x + 0.5), y = sy(sp.y);
+    vctx.save();
+    vctx.translate(x, y);
+    vctx.scale(dpr, dpr);
+    // iğne simgesi: ucu spawn bloğunun üstünde
+    vctx.beginPath();
+    vctx.moveTo(0, 0); vctx.bezierCurveTo(-4, -8, -9, -12, -9, -18); vctx.arc(0, -18, 9, Math.PI, 0); vctx.bezierCurveTo(9, -12, 4, -8, 0, 0);
+    vctx.fillStyle = "#ffe14a"; vctx.fill(); vctx.lineWidth = 2; vctx.strokeStyle = "#000"; vctx.stroke();
+    vctx.fillStyle = "#000"; vctx.font = "bold 11px system-ui, sans-serif"; vctx.textAlign = "center"; vctx.textBaseline = "middle";
+    vctx.fillText("S", 0, -18);
+    vctx.font = "bold 12px system-ui, sans-serif"; vctx.textBaseline = "bottom";
+    vctx.lineWidth = 3; vctx.strokeStyle = "#000"; vctx.strokeText("Spawn", 0, -29); vctx.fillStyle = "#fff"; vctx.fillText("Spawn", 0, -29);
+    vctx.restore();
+  }
+  $("zoomLbl").textContent = (c.z >= 1 ? c.z.toFixed(c.z % 1 ? 1 : 0) : c.z.toFixed(2)) + "x";
+}
+
+function drawOverview() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = Math.round(ov.clientWidth * dpr), h = Math.round(20 * dpr);
+  if (ov.width !== w || ov.height !== h) { ov.width = w; ov.height = h; }
+  octx.fillStyle = "#0d0e11"; octx.fillRect(0, 0, w, h);
+  if (!S.an) return;
+  octx.imageSmoothingEnabled = false;
+  octx.drawImage(stripCanvas, 0, 0, S.W, 1, 0, 0, w, h);
+  const c = S.cam, f = w / S.W;
+  const x0 = Math.max(0, c.x * f), x1 = Math.min(w, (c.x + vpW() / c.z) * f);
+  octx.fillStyle = "rgba(0,0,0,.55)";
+  octx.fillRect(0, 0, x0, h); octx.fillRect(x1, 0, w - x1, h);
+  octx.lineWidth = 2 * dpr; octx.strokeStyle = "#fff";
+  octx.strokeRect(x0 + dpr, dpr, Math.max(2, x1 - x0 - 2 * dpr), h - 2 * dpr);
+  const sp = S.info && S.info.spawn;
+  if (sp) {
+    const x = (sp.x + 0.5) * f;
+    octx.fillStyle = "#ffe14a"; octx.strokeStyle = "#000"; octx.lineWidth = dpr;
+    octx.beginPath(); octx.moveTo(x - 5 * dpr, 0); octx.lineTo(x + 5 * dpr, 0); octx.lineTo(x, 8 * dpr); octx.closePath();
+    octx.fill(); octx.stroke();
+  }
+}
+
+new ResizeObserver(() => { if (S.ready) { if (S.viewMode) applyViewMode(); else clampCam(); } requestDraw(); }).observe(vp);
+window.addEventListener("resize", requestDraw);
+
 document.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => {
-  const v = b.dataset.zoom;
-  S.zoomMode = v;
-  setZoom(v === "fit" ? fitZoom() : +v);
+  if (!S.ready) return;
+  const v = b.dataset.zoom, c = S.cam;
+  if (v === "fill" || v === "all") { S.viewMode = v; applyViewMode(); }
+  else if (v === "in") zoomAt(c.z * 1.5, vpW() / 2, vpH() / 2);
+  else if (v === "out") zoomAt(c.z / 1.5, vpW() / 2, vpH() / 2);
+  else zoomAt(+v, vpW() / 2, vpH() / 2);
 }));
 document.querySelectorAll("[data-mode]").forEach(b => b.addEventListener("click", async () => {
-  if (S.busy || S.mode === b.dataset.mode) return;
+  if (S.busy || !S.ready || S.mode === b.dataset.mode) return;
   S.mode = b.dataset.mode;
   document.querySelectorAll("[data-mode]").forEach(o => o.classList.toggle("on", o === b));
   await render();
 }));
-window.addEventListener("resize", () => { if (S.W && S.zoomMode === "fit") setZoom(fitZoom()); });
+$("spawnBtn").addEventListener("click", goToSpawn);
+function goToSpawn() {
+  const sp = S.info && S.info.spawn; if (!sp || !S.ready) return;
+  hlRegion = null; S.viewMode = null;
+  centerOn(sp.x, sp.y, Math.max(S.cam.z, 2));
+}
 
+/* Fare / dokunma ile kaydırma ve yakınlaştırma */
 let drag = null;
-vp.addEventListener("mousedown", e => {
-  if (e.button !== 0 || !S.W) return;
-  drag = { x: e.clientX, y: e.clientY, sl: vp.scrollLeft, st: vp.scrollTop };
-  vp.classList.add("drag"); e.preventDefault();
+const localXY = e => { const r = view.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+view.addEventListener("pointerdown", e => {
+  if (!S.ready || e.button !== 0) return;
+  view.setPointerCapture(e.pointerId);
+  drag = { x: e.clientX, y: e.clientY, cx: S.cam.x, cy: S.cam.y };
+  view.classList.add("drag");
 });
-window.addEventListener("mousemove", e => {
-  if (!drag) return;
-  vp.scrollLeft = drag.sl - (e.clientX - drag.x);
-  vp.scrollTop = drag.st - (e.clientY - drag.y);
-});
-window.addEventListener("mouseup", () => { drag = null; vp.classList.remove("drag"); });
-
-/* Fare üzerindeyken bilgi */
-function hoverAt(clientX, clientY, el, onlyX) {
-  const r = el.getBoundingClientRect();
-  const x = Math.floor((clientX - r.left) / r.width * S.W);
-  if (x < 0 || x >= S.W) { $("hover").textContent = ""; return; }
-  if (onlyX) {
-    const a = S.an, inR = list => list.find(g => x >= g.s && x <= g.e);
-    const parts = [];
-    const ev = inR(a.evil); if (ev) parts.push(ev.kind === "corr" ? "Corruption" : "Crimson");
-    if (inR(a.hallow)) parts.push("Hallow");
-    if (inR(a.jungle)) parts.push("Jungle");
-    $("hover").textContent = `X ${x} · ${compass(x)} · ${parts.length ? parts.join(" + ") : "Normal sütun"}`;
+view.addEventListener("pointermove", e => {
+  if (!S.ready) return;
+  if (drag) {
+    const c = S.cam;
+    c.x = drag.cx - (e.clientX - drag.x) / c.z;
+    c.y = drag.cy - (e.clientY - drag.y) / c.z;
+    S.viewMode = null; clampCam(); requestDraw();
     return;
   }
-  const y = Math.floor((clientY - r.top) / r.height * S.H);
-  if (y < 0 || y >= S.H) { $("hover").textContent = ""; return; }
+  const [sx, sy] = localXY(e);
+  hoverWorld(Math.floor(S.cam.x + sx / S.cam.z), Math.floor(S.cam.y + sy / S.cam.z));
+});
+const endDrag = () => { drag = null; view.classList.remove("drag"); };
+view.addEventListener("pointerup", endDrag);
+view.addEventListener("pointercancel", endDrag);
+view.addEventListener("wheel", e => {
+  if (!S.ready) return;
+  e.preventDefault();
+  const dy = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1);
+  const [sx, sy] = localXY(e);
+  zoomAt(S.cam.z * Math.exp(-dy * 0.0015), sx, sy);
+}, { passive: false });
+view.addEventListener("dblclick", e => { if (!S.ready) return; const [sx, sy] = localXY(e); zoomAt(S.cam.z * 2, sx, sy); });
+vp.addEventListener("pointerleave", () => { if (!drag) $("hover").textContent = ""; });
+
+/* Genel bakış şeridi: tıkla / sürükle → oraya git */
+let ovDrag = false;
+const ovGo = e => {
+  const r = ov.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width * S.W;
+  const c = S.cam;
+  S.viewMode = S.viewMode === "fill" ? "fill" : null;
+  centerOn(x, c.y + vpH() / 2 / c.z);
+};
+ov.addEventListener("pointerdown", e => { if (!S.ready) return; ovDrag = true; ov.setPointerCapture(e.pointerId); ovGo(e); });
+ov.addEventListener("pointermove", e => {
+  if (!S.ready) return;
+  if (ovDrag) { ovGo(e); return; }
+  const r = ov.getBoundingClientRect();
+  hoverColumn(Math.floor((e.clientX - r.left) / r.width * S.W));
+});
+ov.addEventListener("pointerup", () => ovDrag = false);
+ov.addEventListener("pointercancel", () => ovDrag = false);
+ov.addEventListener("pointerleave", () => { if (!ovDrag) $("hover").textContent = ""; });
+
+/* Fare üzerindeyken bilgi */
+function hoverColumn(x) {
+  if (x < 0 || x >= S.W) return;
+  const a = S.an, inR = list => list.find(g => x >= g.s && x <= g.e);
+  const parts = [];
+  const ev = inR(a.evil); if (ev) parts.push(ev.kind === "corr" ? "Corruption" : "Crimson");
+  if (inR(a.hallow)) parts.push("Hallow");
+  if (inR(a.jungle)) parts.push("Jungle");
+  $("hover").textContent = `X ${x} · ${compass(x)} · ${parts.length ? parts.join(" + ") : "Normal sütun"}`;
+}
+function hoverWorld(x, y) {
+  if (x < 0 || x >= S.W || y < 0 || y >= S.H) { $("hover").textContent = ""; return; }
   const i = y * S.W + x, t = S.tile[i];
-  let blk = t === 0xFFFF ? "Boş" : (NAMES[t] || "Bilinmeyen blok") + " (#" + t + ")";
+  const blk = t === 0xFFFF ? "Boş" : (NAMES[t] || "Bilinmeyen blok") + " (#" + t + ")";
   const extra = [];
   if (S.wall[i]) extra.push("duvar #" + S.wall[i]);
   const l = S.liq[i]; if (l) extra.push(["", "su", "lav", "bal", "shimmer"][l]);
-  $("hover").textContent = `X ${x}, Y ${y} · ${compass(x)} · ${blk}${extra.length ? " · " + extra.join(", ") : ""}`;
+  const sp = S.info.spawn;
+  let depth = "";
+  if (sp) {
+    const d = Math.round(2 * (y - sp.worldSurface));
+    depth = " · " + (d > 0 ? fmt(d) + "' Yeraltı" : d < 0 ? fmt(-d) + "' Yüzey" : "Seviye");
+  }
+  $("hover").textContent = `X ${x}, Y ${y} · ${compass(x)}${depth} · ${blk}${extra.length ? " · " + extra.join(", ") : ""}`;
 }
-$("map").addEventListener("mousemove", e => { if (S.tile && !drag) hoverAt(e.clientX, e.clientY, $("map")); });
-$("strip").addEventListener("mousemove", e => { if (S.an && !drag) hoverAt(e.clientX, e.clientY, $("strip"), true); });
-vp.addEventListener("mouseleave", () => $("hover").textContent = "");
 
 /* Bölgeye git */
 let hlRegion = null;
-function updateHighlight() {
-  const hl = $("hl");
-  if (!hlRegion) { hl.style.display = "none"; return; }
-  const z = S.zoom, r = hlRegion, pad = 4;
-  hl.style.left = (r.s * z - pad) + "px";
-  hl.style.top = (r.top * z - pad) + "px";
-  hl.style.width = ((r.e - r.s + 1) * z + pad * 2) + "px";
-  hl.style.height = ((r.bot - r.top + 1) * z + pad * 2) + "px";
-  hl.style.display = "block";
-}
 function goToRegion(r) {
-  hlRegion = r;
-  const hl = $("hl"); hl.style.animation = "none"; void hl.offsetWidth; hl.style.animation = "";
-  if (S.zoom < 1) { S.zoomMode = "1"; }
-  setZoom(Math.max(S.zoom, 1), (r.s + r.e) / 2, r.yMean);
+  hlRegion = r; S.viewMode = null;
+  const w = r.e - r.s + 1, h = r.bot - r.top + 1;
+  let z = Math.min(vpW() * 0.7 / w, vpH() * 0.8 / h, 4);
+  z = Math.max(z, Math.min(zoomFill(), 1));
+  centerOn((r.s + r.e + 1) / 2, (r.top + r.bot + 1) / 2, z);
 }
 
 /* ------------------------------------------------------------------ */
 /* Sonuç paneli                                                        */
 /* ------------------------------------------------------------------ */
 function distLabel(d) {
-  if (d === null) return { txt: "Jungle bulunamadı", icon: "", cls: "none" };
-  if (d < 50) return { txt: "❌ Jungle'a bitişik", cls: "bad" };
-  if (d <= 200) return { txt: "⚠️ Yakın", cls: "warn" };
-  return { txt: "✅ Uzak", cls: "ok" };
+  if (d === null) return { txt: "Jungle bulunamadı" };
+  if (d < 50) return { txt: "❌ Jungle'a bitişik" };
+  if (d <= 200) return { txt: "⚠️ Yakın" };
+  return { txt: "✅ Uzak" };
 }
 const KIND = {
   corr: { name: "Corruption", color: "#9646e6" }, crim: { name: "Crimson", color: "#e62828" },
@@ -710,8 +876,7 @@ function regionHTML(r, withDist) {
   const w = r.e - r.s + 1;
   let distLine = "";
   if (withDist) {
-    const L = distLabel(r.dist);
-    distLine = `<div class="d">Jungle'a uzaklık: <b style="color:var(--text)">${r.dist === null ? "—" : fmt(r.dist) + " blok"}</b> · ${L.txt}</div>`;
+    distLine = `<div class="d">Jungle'a uzaklık: <b style="color:var(--text)">${r.dist === null ? "—" : fmt(r.dist) + " blok"}</b> · ${distLabel(r.dist).txt}</div>`;
   }
   return `<div class="reg" data-r="${idx}" style="border-left-color:${k.color}" title="Haritada göster">
     <div class="t"><span>${k.name}</span><span class="note">${fmt(w)} blok genişlik</span></div>
@@ -725,7 +890,6 @@ function showResults(w, a, errMsg) {
   if (w && !w.formatOk) out.push(`<div class="warnbox"><b>Dosya formatı tam okunamadı, sonuçlar yanlış olabilir.</b><br><span class="note" style="color:inherit">Blok bölümü ${fmt(w.endPos)}. baytta bitti, ${fmt(w.expectedEnd)}. baytta bitmesi gerekiyordu.</span></div>`);
   if (!a) { $("results").innerHTML = out.join(""); return; }
 
-  // Genel sonuç
   const ev = a.evil, dists = ev.map(r => r.dist).filter(d => d !== null);
   const worst = dists.length ? Math.min(...dists) : null;
   const leakBad = a.leakEvil > 300;
@@ -740,11 +904,13 @@ function showResults(w, a, errMsg) {
   out.push(`<div class="verdict ${v.c}">${v.t}<small>${v.s}</small></div>`);
   if (a.hardmode) out.push(`<div class="box" style="border-color:#ff78c8"><b>Bu dünya hardmode'da</b> <span class="note">(Hallow blokları bulundu: ${fmt(a.totHal)})</span></div>`);
 
+  const sp = w.spawn;
   out.push(`<div class="box"><h3>Dünya</h3><div class="kv">
     <span>Ad</span><span>${esc(w.name)}</span>
     <span>Seed</span><span>${esc(w.seed || "—")}</span>
     <span>Boyut</span><span>${fmt(w.W)} × ${fmt(w.H)} ${w.W >= 8000 ? "(Büyük)" : w.W >= 6000 ? "(Orta)" : w.W >= 4000 ? "(Küçük)" : ""}</span>
     <span>Kötü biyom</span><span>${a.evilKind}</span>
+    <span>Spawn</span><span>${sp ? `<span class="link" id="spawnLink">${compass(sp.x)}</span> <span class="note">(x ${sp.x}, y ${sp.y})</span>` : '<span class="note">Bulunamadı</span>'}</span>
     <span>Dosya sürümü</span><span>${w.version}${w.revision !== null ? " (revizyon " + w.revision + ")" : ""}</span>
   </div></div>`);
 
@@ -752,13 +918,14 @@ function showResults(w, a, errMsg) {
     ${ev.length ? ev.map(r => regionHTML(r, true)).join("") : '<div class="note">Bulunamadı.</div>'}</div>`);
   out.push(`<div class="box"><h3>Hallow bölgeleri (${a.hallow.length})</h3>
     ${a.hallow.length ? a.hallow.map(r => regionHTML(r, true)).join("") : '<div class="note">Hallow yok (dünya henüz hardmode değil).</div>'}</div>`);
-  out.push(`<div class="box"><h3>Jungle (${a.jungle.length})</h3>
+  out.push(`<div class="box"><h3>Jungle</h3>
     ${a.jungle.length ? a.jungle.map(r => regionHTML(r, false)).join("") : '<div class="note">Jungle bulunamadı.</div>'}
     <div class="note" style="margin-top:8px">Jungle sütunlarına sızmış kötü biyom bloğu: <b style="color:var(--text)">${fmt(a.leakEvil)}</b>${a.leakHal ? ` · Hallow bloğu: <b style="color:var(--text)">${fmt(a.leakHal)}</b>` : ""}</div></div>`);
   out.push(`<div class="note" style="margin-bottom:12px">Bölgeler sütun sütun sayılarak bulunur. Bir bölgeye tıklayınca harita oraya kayar.
     Uzaklık: 50 bloktan az “bitişik”, 50–200 arası “yakın”, 200'den fazla “uzak”.</div>`);
   $("results").innerHTML = out.join("");
   $("results").querySelectorAll(".reg").forEach(el => el.addEventListener("click", () => goToRegion(regionList[+el.dataset.r])));
+  const sl = $("spawnLink"); if (sl) sl.addEventListener("click", goToSpawn);
 }
 
 /* ------------------------------------------------------------------ */
@@ -770,9 +937,9 @@ async function loadFile(file) {
   document.querySelectorAll("#toolbar button").forEach(b => b.disabled = true);
   $("fileName").textContent = file.name;
   $("results").innerHTML = "";
-  hlRegion = null; updateHighlight();
-  // Önceki dünyayı bırak
-  Object.assign(S, { tile: null, wall: null, liq: null, an: null });
+  hlRegion = null;
+  Object.assign(S, { tile: null, wall: null, liq: null, an: null, info: null, ready: false });
+  requestDraw();
   try {
     showProgress("Dosya okunuyor…", 0);
     const buf = await file.arrayBuffer();
@@ -781,24 +948,27 @@ async function loadFile(file) {
     showProgress("Analiz ediliyor…", 0.85); await tick();
     const a = analyze(w);
     S.an = a;
-    w.counts = w.ySum = w.yMin = w.yMax = null;
+    w.counts = w.ySum = w.ySq = w.yMin = w.yMax = null;
     computeBackgroundSplit();
-    const map = $("map"); map.width = w.W; map.height = w.H;
     $("empty").style.display = "none";
-    $("mapWrap").hidden = false; $("stripWrap").hidden = false;
-    drawStrip();
+    buildStrip();
     showResults(w, a);
-    S.zoomMode = "fit"; setZoom(fitZoom(), w.W / 2, w.H / 2);
+    S.viewMode = "fill";
+    S.cam = { x: 0, y: 0, z: zoomFill() };
+    centerOn(w.spawn ? w.spawn.x : w.W / 2, w.H / 2, zoomFill());
     await render();
     document.querySelectorAll("#toolbar button").forEach(b => b.disabled = false);
+    $("spawnBtn").disabled = !w.spawn;
   } catch (e) {
     hideProgress();
     console.error(e);
     const msg = e instanceof FormatError ? e.message
       : e instanceof RangeError ? "Dosya okunurken hata oluştu (bellek yetersiz ya da dosya bozuk): " + e.message
       : "Beklenmeyen hata: " + e.message;
+    Object.assign(S, { tile: null, wall: null, liq: null, an: null, info: null, ready: false, W: 0 });
     showResults(null, null, msg);
-    if (!S.an) { $("empty").style.display = ""; $("mapWrap").hidden = true; $("stripWrap").hidden = true; S.W = 0; }
+    $("empty").style.display = "";
+    requestDraw();
   } finally {
     S.busy = false;
   }

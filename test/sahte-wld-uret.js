@@ -20,9 +20,17 @@ for (let x=0;x<W;x++){
     tile[i]=t; if (y>s+3) wall[i]= rnd()<0.002? 300 : 2;
     if (rnd()<0.003) paint[i]=5; if (rnd()<0.003) wpaint[i]=3;
   }
-  tile[(s-1)*W+x] = rnd()<0.1 ? 3 : 0xFFFF;          // important (çerçeveli) bitki
+  tile[(s-1)*W+x] = rnd()<0.1 ? 3 : 0xFFFF;
+  if (x>=W*0.9) tile[(s-1)*W+x]=0xFFFF;          // important (çerçeveli) bitki
   if (x%50===0) { for(let y=s+30;y<s+36;y++){ liq[y*W+x] = 1+(x/50)%4; tile[y*W+x]=0xFFFF; } }
 }
+// Yeraltında jungle çimi kenarlı küçük çamur yamaları (gerçek dünyalarda olur, Jungle sayılmamalı)
+for (let [cx,cy,r] of [[270,0.55,22],[285,0.7,18],[150,0.6,20],[360,0.5,40],[720,0.65,20]]) {
+  r=Math.max(4,Math.round(r*H/2400)); const X=Math.round(cx*W/800), Y=Math.round(cy*H);
+  for(let y=Y-r;y<=Y+r;y++)for(let x=X-r;x<=X+r;x++){const d=Math.hypot(x-X,y-Y); if(d<=r){const i=y*W+x; tile[i]= d>r-3?60:59;}}
+  for(let y=Y-r+6;y<=Y+r-6;y++)for(let x=X-8;x<=X+8;x++)tile[y*W+x]=0xFFFF; // içinde mağara
+}
+const SPX=Math.round(W*0.5), SPY=surf-1, WS=surf+10, RL=surf+60;
 // --- yaz ---
 const bytes=[]; const u8=v=>bytes.push(v&255), u16=v=>{u8(v);u8(v>>8)}, i32=v=>{u16(v);u16(v>>>16)};
 const str=s=>{const b=Buffer.from(s,'utf8');let n=b.length;while(n>=0x80){u8(n|0x80);n>>>=7}u8(n);for(const c of b)u8(c)};
@@ -31,7 +39,10 @@ u16(11); const ptrAt=bytes.length; for(let i=0;i<11;i++)i32(0);
 u16(NIMP); {let b=0,m=1;for(let i=0;i<NIMP;i++){if(important[i])b|=m;m<<=1;if(m===256){u8(b);b=0;m=1}} if(m!==1)u8(b);}
 const sec=[]; sec[0]=bytes.length;
 str('Deneme Dünyası ğüşİ'); str('5.2.ABCD.seed'); for(let i=0;i<24;i++)u8(i); i32(99); i32(0);i32(W*16);i32(0);i32(H*16); i32(H); i32(W);
-for(let i=0;i<50;i++)u8(0xAB); // header'ın geri kalanı (okunmamalı)
+// header'ın geri kalanı: okuyucu alan alan okumaz, sadece spawn örüntüsünü arar
+i32(1); u8(1);u8(0);u8(0); for(let i=0;i<8;i++)u8(i*7); u8(2); i32(W/3|0);i32(W/2|0);i32(W*2/3|0); for(let i=0;i<7;i++)i32(i);
+i32(SPX); i32(SPY); const db=Buffer.alloc(16); db.writeDoubleLE(WS,0); db.writeDoubleLE(RL,8); for(const c of db)u8(c);
+for(let i=0;i<40;i++)u8(0xAB);
 sec[1]=bytes.length;
 const key=i=>[tile[i],wall[i],liq[i],paint[i],wpaint[i]].join(',');
 for(let x=0;x<W;x++){ let y=0; while(y<H){ const i=y*W+x; let r=0; while(y+r+1<H && key((y+r+1)*W+x)===key(i) && !(tile[i]!==0xFFFF&&important[tile[i]]&&false)) r++;
@@ -54,5 +65,5 @@ sec[2]=bytes.length; for(let i=0;i<20;i++)u8(0);
 for(let i=3;i<11;i++)sec[i]=bytes.length;
 const buf=Buffer.from(bytes); sec.forEach((v,k)=>buf.writeInt32LE(v,ptrAt+4*k)); fs.writeFileSync(out,buf);
 const fnv=a=>{let h=2166136261;for(let i=0;i<a.length;i++){h^=a[i];h=Math.imul(h,16777619)}return h>>>0};
-fs.writeFileSync(out+'.json',JSON.stringify({W,H,tile:fnv(tile),wall:fnv(wall),liq:fnv(liq),size:buf.length}));
+fs.writeFileSync(out+'.json',JSON.stringify({spawn:[SPX,SPY,WS,RL],W,H,tile:fnv(tile),wall:fnv(wall),liq:fnv(liq),size:buf.length}));
 console.log('yazıldı',out,buf.length,'bayt');
